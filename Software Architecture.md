@@ -74,4 +74,5 @@ Mit folgender Methode können Szenarien zur DDD-Modellen abgebildet werden. Dies
 * Nach Verben suchen, Operationen daraus bilden
 
 #### Communication Diagrams
- 
+UML Darstellungsmöglichkeit für ein sogn. Kommunikationsdiagram.
+![alt-text](images/communication-diagram.png)
