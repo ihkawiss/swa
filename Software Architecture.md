@@ -37,8 +37,11 @@ Software-Architektur bedeutet in den meisten Fällen, den Aufbau eines Systems a
 Neben den üblichen Pfeiltypen wie Inheritance, Implementing oder Beziehung existieren:
 
 * **Aggregation** "ist Teil von"  
+ 
   ![alt-text](images/aggregation.png)
+  
 * **Composition** "besteht aus"
+
   ![alt-text](images/composition.png)
 
 ### Sichten (*Views*)
@@ -88,6 +91,7 @@ Mit folgender Methode können Szenarien zur DDD-Modellen abgebildet werden. Dies
 
 UML Darstellungsmöglichkeit für ein sogn. Kommunikationsdiagram.  
 **Tipp**: Szenario Nummer (z.B. 5.2) jeweils notieren.
+
 ![alt-text](images/communication-diagram.png)
 
 ### Entwurf in Arbeitsteilung umsetzen
