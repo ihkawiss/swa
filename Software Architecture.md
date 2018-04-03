@@ -210,3 +210,24 @@ Lehman untersuchte die Entwicklung von Software, speziell welche Kräfte neue So
 - Beibehaltung der Ähnlichkeit  
   Über die Lebenszeit einer Software gesehen ist der inkrementelle Change je Release etwa konstant.
   
+#### Open / Closed Principle
+
+*Klassen sollen offen für Änderungen des Verhaltens und zugleich geschlossen gegenüber Veränderun- gen am Code sein*
+
+Gemäss dem Open / Closed Prinzip sollen bei Objekten Verhaltensänderungen möglich sein, ohne dass man ihren bestehenden Code anpassen - also bestehende Klassen nicht neu compilieren muss. So führt dieses Prinzip oft dazu, dass Fallunterscheidungen aufgelöst und mittels Vererbung gelöst werden. Mögliches Vorgehen:
+
+- Aublauf in einer Methode festlegen, Aktivitäten in Methoden kapseln
+- Nur die gewünschte Methode überschreiben, Ablauf bleibt gleich
+- Ablauf überschreiben, Aktivitäten bleiben gleich
+- Template Methods (leere Methoden die in Child überschrieben werden müssen)
+
+**Grundsätzliche Regel**  
+
+Methoden die nicht privat oder static sind sowie überschrieben werden können sollten:
+
+- abstract oder
+- final oder
+- leer sein
+
+## Liskov Substitution Principle
+  
