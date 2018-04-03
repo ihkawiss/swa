@@ -120,4 +120,13 @@ Aus den Objekten der Logical View können die benötigten Klassen abgeleitet wer
 	**Ergebnis:** vollständige Methoden-Signatur inkl. Rückgabewert und Parametern sowie zusätzlichen Informationen zum Verhalten.
 	
 3. Die so erstellten Grundgerüste können nun unabhängig ausprogrammiert und anschliessend zusammengefügt werden.
+
+#### Learnings
+
+- Paralleles Arbeiten ist deutlich schneller (time to market).
+- Schnittstellen müssen genügend präzise definiert sein   
+  **=>** Signatur, Parameter, Rückgabewerte, Naming, Verhalten (JavaDoc).
+- Fehler in Klassen fallen erst bei Integration auf.
+- Innerhalb der Klasse hat der Entwickler viel Freiheit (z.B. für Architektur nicht relevante Entscheide)
+- Dokumentation der Architektur sowie dessen Verständnis helfen bei der Einarbeitung, um Code gezielt ändern zu können.
 	
