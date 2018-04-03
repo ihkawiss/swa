@@ -94,7 +94,7 @@ UML Darstellungsmöglichkeit für ein sogn. Kommunikationsdiagram.
 
 ![alt-text](images/communication-diagram.png)
 
-### Entwurf in Arbeitsteilung umsetzen
+## Entwurf in Arbeitsteilung umsetzen
 
 #### Objektorientierte Analyse (OOA)
 
@@ -103,3 +103,21 @@ Analyse sowie modellierung der realen Welt (DDD / LRG) zur Analyse der notwentig
 #### Objektorientiertes Design (OOD)
 
 Im OOD werden zusätzlich Aufgaben betrachtet welche in der realen Welt eigentlich nicht vorkommen, für die Umsetzung der Software aber notwendig sind. Ziel ist in der Logical View zu verstehen, welche Objekte zur Laufzeit der Software die relevante Wirkung erzeugen und wie diese Objekte dafür zusammenarbeiten.
+
+#### Von Objekten zu Klassen (Development View)
+
+Aus den Objekten der Logical View können die benötigten Klassen abgeleitet werden. Beziehungen benötigen dabei Instanzvariabeln, Interaktionen öffentliche Methoden. Ziel ist die gerade benötigten Klassen zu implementieren welche für das Szenario nötig sind - die Development View enthält nur jene Klassen die auch Architektur-relevant sind (z.B. Klassen hinter einer Facade/Factory nicht relevant).
+
+#### Methodisches Vorgehen
+
+1. Liste aller zu programmierenden Klassen erstellen, so dass:  
+	- jedes Objekt von genau einer Klasse instanziert werden kann
+	- gleichartige Objekte mit identischem Verhalten von derselben Klasse instanziert werden
+	- jede Klasse mind. eines der benötigen Objekte instanziert.  
+	**=> Objekte den Klassen zuordnen**
+	
+2. Für jeden eingehenden Pfeil, welcher eine Interaktion darstellt, wird eine entsprechende public Methode vorgesehen.  
+	**Ergebnis:** vollständige Methoden-Signatur inkl. Rückgabewert und Parametern sowie zusätzlichen Informationen zum Verhalten.
+	
+3. Die so erstellten Grundgerüste können nun unabhängig ausprogrammiert und anschliessend zusammengefügt werden.
+	
