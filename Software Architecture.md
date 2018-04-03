@@ -129,4 +129,84 @@ Aus den Objekten der Logical View können die benötigten Klassen abgeleitet wer
 - Fehler in Klassen fallen erst bei Integration auf.
 - Innerhalb der Klasse hat der Entwickler viel Freiheit (z.B. für Architektur nicht relevante Entscheide)
 - Dokumentation der Architektur sowie dessen Verständnis helfen bei der Einarbeitung, um Code gezielt ändern zu können.
-	
+
+## SOLID Prinzipien
+
+Folgende Entwurfsmuster haben zum Ziel - wartbare, flexible und verständliche Software zu produzieren.
+
+#### Wiederverwendbarkeit
+
+Die Entstehung von objektorientierten Programmiersprachen wie Java ist auf das Bedürfnis, die reale Welt abzubilden sowie Komponenten wieder zu verwenden (Änderbarkeit/Erweiterbarkeit), zurückzuführen. Es gibt verschiedene Arten wie Komponenten wiederverwendet werden können.
+
+1. Vorhandene Klassen werden gemeinsam mit neuen Klassen verwendet.
+2. Vorhandene Klassen werden verwendet um neue Objekte (z.B. neue Ausprägungen wie Buffet -> SuppenBuffet) zu instanzieren. 
+3. Neue Klassen werden von vorhanden abgeleitet und überschreiben Notwendiges.
+
+Die Möglichkeit des Erweiterns bzw. Anpassens kann jedoch schnell zu unübersichtlichen Systemen führen. Aus solchen Erfahrungen haben sich Entwurfsmuster entwickelt welche versuchen Chaos zu verhindern.
+
+#### Single Responsibility Principle
+
+*Jede Klasse hat genau eine Verantwortung, d.h. nur eine Art von Änderungen in der Spezifikation soll die Klasse betreffen können.*
+
+Ein Objekt bzw. eine Klasse welche mehr als eine Aufgabe übernimmt, muss immer dann angepasst werden, wenn eine der Aufgaben ändert. Hier besteht die Gefahr, dass sich Änderungen an einer Aufgabe aus Versehen auch auf einen anderen Aufgabenbereich auswirken. Speziell in Fällen, in welchen alte und neue Implementationen von Aufgaben weiter existieren, entstehen enorm viele mögliche Kombinationen. Sind Verantwortungen hingegen über mehrere Objekte/Klassen aufgeteilt, so stellt dies eine klare Abgrenzung der Zuständigkeit dar. Anpassungen an einer Aufgabe ändern so in der Regel auch nur das Verhalten der Zuständigen Klasse (grade mittels privater Sichtbarkeit von Ausprägungen).
+
+**Verantwortungen notieren**  
+
+Werden Verantwortungen eines Objekts beschrieben, immer klar und prägnant:
+
+- **Kennt** *die Parameter der Simulation...*
+- **Erzeugt** *das neue Objekt für den Fall xy...*
+- **Koordiniert** *die Aktivierung sowie den Life-Cycle der Objekte xy...*
+- **Speichert** *den aktuellen Status von xy...*
+- **Steuert** *den Ablauf der in xy definierten Szenarien...*
+
+**Hilfsfragen**
+
+Folgende Fragen helfen zu entscheiden, ob eine Verantwortung als Einheit betrachtet oder besser aufgegliedert werden sollte.
+
+- Wie gross ist die Chance, dass eine Lösung in einem Verantwortungsbereich in einem anderen (wieder-) verwendet wird?
+- Wie wahrscheinlich/häufig treten Änderungen in den einzelnen Verantwortungen auf?
+- Treten diese Änderungen unabhängig auf voneinander?
+- Kann die Aufteilung in einer feineren Entwurfsstufe gemacht werden? (non-architectural design)
+
+**Verwandte Prinzipien**
+
+- Prinzip der hohen Kohäsion  
+  Die von einem Objekt wahrgenommen Aufgaben sollen in engem Zusammenhang stehen.  
+  
+- Responsibillity-Driven Design (RDD)  
+  Basierend auf einer Liste von Verantwortungen werden Objekte erstellt welche diese Wahrnehmen.  
+  Ein solcher Entwurf ist also durch die Zuständigkeit getrieben.
+
+#### Lehman's Law
+
+Lehman untersuchte die Entwicklung von Software, speziell welche Kräfte neue Software voran treiben und welche diese bremsen.
+
+- **S-TYPE**  
+  Systeme welche bekannte Spezifikationen und dazugehörige Lösungen haben (z.B. Bubble Sort). 
+  Richtigkeit des Systems lässt sich mit Sicherheit beurteilen.
+  
+- **P-TYPE**  
+  Systeme welche zwar eine Spezifikation und womöglich eine theoretische Lösung besitzten, in der Praxis aber nicht so umgesetzt werden können.
+  Korrektheit lässt sich nicht verifizieren. Beispiel: Schach Bot -> kombinatorische Komplexität zu hoch -> Heuristik.
+  
+- **E-TYPE**  
+  "Real-World" Systeme, Business Systeme bei welchen die Spezifikationen vielleicht heute bekannt und richtig sind, morgen aber Andere sein können. Umgebung ändert sich, Bedürfnisse von Business und Personen ändern sich und sind nicht starr.
+  
+**Gesetzte**  
+
+- Kontinuierliche Veränderung  
+  Jede *real World* Software muss sich ändern oder wird weniger nützlich.
+  
+- Steigende Komplexität  
+  Ein Softwaresystem wird mit voran schreitender Zeit komplexer. Mit hohen Kosten kann dies kurzfristig reduziert werden.
+  
+- Evolution grosser Anwendungen  
+  Ist selbstregulierender Prozess. Messungen von Attributen, Zeit zwischen Releases, Fehlermeldungen etc. Liefern Indikatoren.
+  
+- Organisatorische Stabilität  
+  Über die Lebenszeit einer Software gesehen ist der Entwicklungsaufwand ungefähr gleichbleibend.
+  
+- Beibehaltung der Ähnlichkeit  
+  Über die Lebenszeit einer Software gesehen ist der inkrementelle Change je Release etwa konstant.
+  
