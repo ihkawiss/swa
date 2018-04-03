@@ -230,4 +230,8 @@ Methoden die nicht privat oder static sind sowie überschrieben werden können s
 - leer sein
 
 ## Liskov Substitution Principle
+
+Das Prinzip sagt zusammengefasst aus, dass Subtypen einer Klasse keine breaking Changes einführen dürfen, so dass sich diese anders als deren Superklassen verhalten. Da Sub-Typen z.B. in Listen vom Super-Type gespeichert werden können gehen Anwender davon aus, dass sich diese Objekte auch gleich verhalten. Sie sollen also nich mehr erwarten und weniger liefern als Ihre Superklassen dies tun. So muss im Altag folgendes zur Erfüllung des Liskov Substitution Principle gegeben sein:
+
+**Eine Unterklasse soll an die Stelle der Oberklasse treten können, ohne dass dabei Seiteneffekte auftreten.**
   
