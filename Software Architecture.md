@@ -144,7 +144,7 @@ Die Entstehung von objektorientierten Programmiersprachen wie Java ist auf das B
 
 Die Möglichkeit des Erweiterns bzw. Anpassens kann jedoch schnell zu unübersichtlichen Systemen führen. Aus solchen Erfahrungen haben sich Entwurfsmuster entwickelt welche versuchen Chaos zu verhindern.
 
-#### Single Responsibility Principle
+### Single Responsibility Principle
 
 *Jede Klasse hat genau eine Verantwortung, d.h. nur eine Art von Änderungen in der Spezifikation soll die Klasse betreffen können.*
 
@@ -210,7 +210,7 @@ Lehman untersuchte die Entwicklung von Software, speziell welche Kräfte neue So
 - Beibehaltung der Ähnlichkeit  
   Über die Lebenszeit einer Software gesehen ist der inkrementelle Change je Release etwa konstant.
   
-#### Open / Closed Principle
+### Open / Closed Principle
 
 *Klassen sollen offen für Änderungen des Verhaltens und zugleich geschlossen gegenüber Veränderun- gen am Code sein*
 
@@ -229,12 +229,17 @@ Methoden die nicht privat oder static sind sowie überschrieben werden können s
 - final oder
 - leer sein
 
-## Liskov Substitution Principle
+### Liskov Substitution Principle
 
 Das Prinzip sagt zusammengefasst aus, dass Subtypen einer Klasse keine breaking Changes einführen dürfen, so dass sich diese anders als deren Superklassen verhalten. Da Sub-Typen z.B. in Listen vom Super-Type gespeichert werden können gehen Anwender davon aus, dass sich diese Objekte auch gleich verhalten. Sie sollen also nich mehr erwarten und weniger liefern als Ihre Superklassen dies tun. So muss im Altag folgendes zur Erfüllung des Liskov Substitution Principle gegeben sein:
 
 **Eine Unterklasse soll an die Stelle der Oberklasse treten können, ohne dass dabei Seiteneffekte auftreten.**
 
-## Interface Segregation Principle
+### Interface Segregation Principle
 
 Das Prinzip sagt zusammengefasst aus, dass es besser ist viele Interfaces zu definieren als wenige. Konkret soll für jede von Objekten wahrzumenden Rollen ein Interface erstellt werden welches die nötigen Methoden definiert. Interfaces werde so zu Rollendefinitionen, das Implementieren dieser zur Aussage welche Rollen das Objekt wahrnimmt. Durch diese Trennung ist es z.B. einfach möglich einen PayingGuest der Kasse zu übergeben. Dem Buffet würde hingegen ein Guest vom Typ BuffetVisitingGuest übergeben. 
+
+### Dependency Inversion Principle
+
+Das Prinzip sagt zusammengefasst aus, dass man Variabeln und Parameter immer vom schwächst möglichen Typ definieren sollte, grade so dass keine Type-Casts notwendig sind. Hier gibt es einen Bezug auf das *Interface Segregation Principle*, eine Variable sollte mit genau den Rollen typisiert sein die ein ihr zugewiesenes Objekt haben muss. Der resultierende Code ist somit nicht von konkreten Objekten abhängig. Dieses Prinzip gilt auch für die Instanzierung von Objekten, welche wenn möglich von aussen eingefügt werden sollten (Dependecy Injection). Durch den Rollen-basierten Typ sind die Instanzen nicht an konkrete Implementierungen gebunden. Abstraktionen zur Schaffung von Unabhängigkeit sollten grundsätzlich mittels Interfaces und nicht abs- trakten Klassen als Typen formuliert werden.
+
