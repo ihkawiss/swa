@@ -239,3 +239,17 @@ Das Prinzip sagt zusammengefasst aus, dass es besser ist viele Interfaces zu def
 
 Das Prinzip sagt zusammengefasst aus, dass man Variabeln und Parameter immer vom schwächst möglichen Typ definieren sollte, grade so dass keine Type-Casts notwendig sind. Hier gibt es einen Bezug auf das *Interface Segregation Principle*, eine Variable sollte mit genau den Rollen typisiert sein die ein ihr zugewiesenes Objekt haben muss. Der resultierende Code ist somit nicht von konkreten Objekten abhängig. Dieses Prinzip gilt auch für die Instanzierung von Objekten, welche wenn möglich von aussen eingefügt werden sollten (Dependecy Injection). Durch den Rollen-basierten Typ sind die Instanzen nicht an konkrete Implementierungen gebunden. Abstraktionen zur Schaffung von Unabhängigkeit sollten grundsätzlich mittels Interfaces und nicht abs- trakten Klassen als Typen formuliert werden.
 
+### Thread- vs. Event-Based Programmierung
+
+Teil der Process-View ist die Planung sowie Darstellung nebenläufige Aktivitäten. Software-Systeme werden grade im ***RDD*** oft so geplant, dass der Fokus nicht auf eine feste Abfolge von Operationen gerichtig ist. Vielmehr steht die sinvolle Gruppierung von Objekten im Vordergrund. Damit aus den einzelnen Operationen eine nützbringende Teiloperation entsteht, müssen diese untereinander koordiniert werden. Diese Aufgabe kann an dedizierte Objekte übergeben werden (solange der Ablauf definierbar ist) - sogenannte Controller.  
+
+**Controller früher:** Das Hauptprogramm, der Benutzer konnte lediglich reagieren.
+**Controller heute:** Der Benutzer, das Programm reagiert auf dessen Eingaben/Signale.
+
+#### Thread-Based
+
+In der Thread-Based Programmierung wird ein Ablauf als feste Folge (übliche Kontrollstrukturen) von Einzelschritten programmiert. In einer Restaurant-Simmulation würde der Ablauf auf mehrere Threads verteilt, die gleichzeitig arbeiten. Dabei ist es nötig, Synchronizers sowie Warten zu implementieren - dies ist teuer und kann schnell zu Fehlern bzw. unerwünschten Interleavings führen. Thread basierte Programmierung kommen schnell an ihre Grenzen - Controller ausserhalb, Distributed Systems. Zwar sind Thread-Based Programme einfacher zu verstehen, können aber dennoch schnell unübersichtlich werden.
+
+#### Event-Based
+
+Grundmechanismus für die Event-Based Programmierung ist der Event Queue im Kernel (=> Java z.B. PriorityQueue<Node>(capacity, comparator)), welcher Events sequenziell abarbeitet. Durch diese Sequenzialisierung entfallen Mutex-Konstrukte sowie das damit zusammenhängende Fehlerpotential. Die Implementierung einer solchen Event Queue erfolgt nach dem Command Pattern. Ein Event wird also als Command-Objekt realisiert und kennt seine Routine (z.B. Event.handle()) welche auf kurze und atomare Operationen setzt anstatt nebenläufigen Threads.
