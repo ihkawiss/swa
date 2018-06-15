@@ -30,24 +30,20 @@ Software-Architektur heisst, über den Aufbau eines Systems nachzudenken ohne di
 
 Software-Architektur bedeutet in den meisten Fällen, den Aufbau eines Systems aus mehreren **Komponenten** (*Components*) und deren **Interaktionen** (*Interactions*) zu beschreiben. Die Abstraktion als Box lässt offen wie diese im Inneren genau funktioniert. Beziehungen zwischen Komponenten lassen sich illustrieren - welche verwendet, benötigt welche? Welche sind gänzlich unabhängig? Solche Diagramme repräsentieren in der Regel Teilbereiche aus einer bestimmten Sichtweise (*View*). Um die gesammte Architektur verstehen zu können müssen meist mehrere Sichten betrachtet werden.  
 
-![alt-text](images/box-arrow.png)
-
 #### Beziehungstypen
 
 Neben den üblichen Pfeiltypen wie Inheritance, Implementing oder Beziehung existieren:
 
-* **Aggregation** "ist Teil von"  
- 
-  ![alt-text](images/aggregation.png)
+* **Aggregation** "ist Teil von"
+<img src="images/aggregation.png" height="50"/>
   
 * **Composition** "besteht aus"
-
-  ![alt-text](images/composition.png)
+<img src="images/composition.png" height="50"/>
 
 ### Sichten (*Views*)
 
 In der Software-Architektur haben sich folgende Sichten etabliert.  
-![alt-text](images/view-model.png)
+<img src="images/view-model.png" height="180"/>
 
 #### Development View
 
