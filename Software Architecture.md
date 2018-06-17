@@ -253,3 +253,35 @@ In der Thread-Based Programmierung wird ein Ablauf als feste Folge (übliche Kon
 #### Event-Based
 
 Grundmechanismus für die Event-Based Programmierung ist der Event Queue im Kernel (=> Java z.B. PriorityQueue<Node>(capacity, comparator)), welcher Events sequenziell abarbeitet. Durch diese Sequenzialisierung entfallen Mutex-Konstrukte sowie das damit zusammenhängende Fehlerpotential. Die Implementierung einer solchen Event Queue erfolgt nach dem Command Pattern. Ein Event wird also als Command-Objekt realisiert und kennt seine Routine (z.B. Event.handle()) welche auf kurze und atomare Operationen setzt anstatt nebenläufigen Threads.
+
+### Modulare Programmierung
+
+In komplexen Softwaresystemen ist die Anzahl Komponenten gross, die Architektur entsprechend unübersichtlich. Objekte bzw. Klassen sind die atomaren Grundpfeiler der objektorientierten Programmierung. Sie haben eine Identität und sind technisch in Speicherblöcken abgebildet. Damit Software-Systeme sinvoll gebaut werden können, ist es nötig Komponenten in Module gruppieren zu können. Module sind Einheiten die erlauben von inneren Details zu abstrahieren sowie diese zu verstecken - ohne dass andere Module betroffen sind.
+
+#### Möglichkeiten
+- Module im inneren überarbeiten, ohne das andere Module betroffen sind bzw. etwas mitbekommen.
+- Module wiederverwenden in verschiedenen Systemen.
+- Integrität der Kombination von Klassen sichern.
+- Die einzelnen Module in Arbeitsteilung entwickeln.
+- Zusätzliche Erweiterungen einfach möglich.
+- Modulare Anforderungen/Produktlinie realisieren.
+- Code Basis gliedern und Abhängigkeiten einschränken.
+
+#### JAR Files
+
+In Java können mittels JAR-Files Module gebildet und kombiniert werden. Eine Kombination wird gebildet, indem die benötigten JARs auf den ***Class Path*** gelegt werden. Benötigte Klassen werden durch den ***Class Loader*** dann in diesem gesucht. Dieses Gebilde führt jedoch zu einem grösseren Problem: **Klassen mit selbem Namen (FQN) können vorkommen, es wird jeweils jene Instanziert welche zuerst auf dem Class Path liegt.** Dies Führt dazu, dass verschiedene Kombinationen zu unterschiedlichem Verhalten führen können. Hinzu kommt, dass Information Hiding dadurch ebenso unzuverlässig wird (package private).
+
+#### Sealed JARs
+
+Bei grösseren Kombinationen wird es also praktisch unmöglich, den Class Path korrekt zu konfigurieren (Fehler nicht bekannt). Eine Abhilfe schaffen hier sogn. ***Sealed JARs***. Hierbei würde eine Exception geworfen, wenn mehrere JARs einen identischen Package-Namen enthalten. Dieser Mechanismus wird jedoch erst beim Kompillieren geprüft, also sehr spät im Entwicklungsprozess.
+
+#### Java9 Module
+
+Mit Java 9 können Module so definiert werden, dass exportierte und interne Klassen unterschieden werden.
+
+``` Java
+module ch.fhnw.swa.mod.sim.basic {
+exports ch.fhnw.swa.mod.sim.eventbase; exports ch.fhnw.swa.mod.sim;
+exports ch.fhnw.swa.mod.sim.roles.restaurant; exports ch.fhnw.swa.mod.sim.roles.guests;
+}
+```
