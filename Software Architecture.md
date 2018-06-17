@@ -277,7 +277,7 @@ Bei grösseren Kombinationen wird es also praktisch unmöglich, den Class Path k
 
 #### Java9 Module
 
-Mit Java 9 können Module so definiert werden, dass exportierte und interne Klassen unterschieden werden.
+Mit Java 9 können Module so definiert werden, dass exportierte **(Architektur)** und interne Klassen (irrelevant für Architektur) unterschieden werden. JARs werden hier ebenso wie Sealed JARs behandelt => Package-Namen müssen sich unterscheiden!
 
 ``` Java
 module ch.fhnw.swa.mod.sim.basic {
