@@ -239,6 +239,8 @@ Das Prinzip sagt zusammengefasst aus, dass es besser ist viele Interfaces zu def
 
 Das Prinzip sagt zusammengefasst aus, dass man Variabeln und Parameter immer vom schwächst möglichen Typ definieren sollte, grade so dass keine Type-Casts notwendig sind. Hier gibt es einen Bezug auf das *Interface Segregation Principle*, eine Variable sollte mit genau den Rollen typisiert sein die ein ihr zugewiesenes Objekt haben muss. Der resultierende Code ist somit nicht von konkreten Objekten abhängig. Dieses Prinzip gilt auch für die Instanzierung von Objekten, welche wenn möglich von aussen eingefügt werden sollten (Dependecy Injection). Durch den Rollen-basierten Typ sind die Instanzen nicht an konkrete Implementierungen gebunden. Abstraktionen zur Schaffung von Unabhängigkeit sollten grundsätzlich mittels Interfaces und nicht abs- trakten Klassen als Typen formuliert werden.
 
+## Teil 2
+
 ### Thread- vs. Event-Based Programmierung
 
 Teil der Process-View ist die Planung sowie Darstellung nebenläufige Aktivitäten. Software-Systeme werden grade im ***RDD*** oft so geplant, dass der Fokus nicht auf eine feste Abfolge von Operationen gerichtig ist. Vielmehr steht die sinvolle Gruppierung von Objekten im Vordergrund. Damit aus den einzelnen Operationen eine nützbringende Teiloperation entsteht, müssen diese untereinander koordiniert werden. Diese Aufgabe kann an dedizierte Objekte übergeben werden (solange der Ablauf definierbar ist) - sogenannte Controller.  
@@ -253,6 +255,27 @@ In der Thread-Based Programmierung wird ein Ablauf als feste Folge (übliche Kon
 #### Event-Based
 
 Grundmechanismus für die Event-Based Programmierung ist der Event Queue im Kernel (=> Java z.B. PriorityQueue<Node>(capacity, comparator)), welcher Events sequenziell abarbeitet. Durch diese Sequenzialisierung entfallen Mutex-Konstrukte sowie das damit zusammenhängende Fehlerpotential. Die Implementierung einer solchen Event Queue erfolgt nach dem Command Pattern. Ein Event wird also als Command-Objekt realisiert und kennt seine Routine (z.B. Event.handle()) welche auf kurze und atomare Operationen setzt anstatt nebenläufigen Threads.
+
+```java
+	private static Queue<Node> queue = new PriorityQueue<Node>();
+	...
+	public static
+		while (!queue.isEmpty()) {
+			Node n = queue.poll();
+			if (now > n.dueTime) throw new IllegalStateException(); now = n.dueTime;
+			n.event.handle(now);
+	} }
+	...
+	private void welcomeGuest() {
+		active = true;
+		final CounterVisitingGuest g = q.getFirst(); EventQueue.schedule(new Event() {
+			@Override
+			public void handle(int time) { g.takePlate();
+				if (q.length() > 0) welcomeGuest(); else active = false;
+			}
+		}, serviceDuration);
+	}
+```
 
 ### Modulare Programmierung
 
@@ -275,13 +298,26 @@ In Java können mittels JAR-Files Module gebildet und kombiniert werden. Eine Ko
 
 Bei grösseren Kombinationen wird es also praktisch unmöglich, den Class Path korrekt zu konfigurieren (Fehler nicht bekannt). Eine Abhilfe schaffen hier sogn. ***Sealed JARs***. Hierbei würde eine Exception geworfen, wenn mehrere JARs einen identischen Package-Namen enthalten. Dieser Mechanismus wird jedoch erst beim Kompillieren geprüft, also sehr spät im Entwicklungsprozess.
 
-#### Java9 Module
+#### Java9 Module & ServiceLoader
 
-Mit Java 9 können Module so definiert werden, dass exportierte **(Architektur)** und interne Klassen (irrelevant für Architektur) unterschieden werden. JARs werden hier ebenso wie Sealed JARs behandelt => Package-Namen müssen sich unterscheiden!
+Mit Java 9 können Module so definiert werden, dass exportierte **(Architektur)** und interne Klassen (irrelevant für Architektur) unterschieden werden. JARs werden hier ebenso wie Sealed JARs behandelt => Package-Namen müssen sich unterscheiden!   
+Der Java ServiceLoader ermöglicht Implementationen zu injecten von bekannten Interfaces (entkopplung Module).
 
 ``` Java
 module ch.fhnw.swa.mod.sim.basic {
-exports ch.fhnw.swa.mod.sim.eventbase; exports ch.fhnw.swa.mod.sim;
-exports ch.fhnw.swa.mod.sim.roles.restaurant; exports ch.fhnw.swa.mod.sim.roles.guests;
+	exports ch.fhnw.swa.mod.sim.eventbase; exports ch.fhnw.swa.mod.sim;
+	exports ch.fhnw.swa.mod.sim.roles.restaurant; exports ch.fhnw.swa.mod.sim.roles.guests;
+	requires transitive ch.fhnw.swa.mod.xyz;
+}
+
+module service.framework { 
+	exports service.framework;
+	uses service.framework.Service; // DI im framework mittels ServiceLoader.load(Service.class); 
+}
+
+module service.impl1 {
+	requires service.framework;
+	provides service.framework.Service with service.impl1.ServiceImpl;
 }
 ```
+
