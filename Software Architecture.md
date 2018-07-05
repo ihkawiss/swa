@@ -321,3 +321,69 @@ module service.impl1 {
 }
 ```
 
+### Modularer Entwurf
+
+In der Software-Architektur sind Module (JARs, DLLs, SO, usw.) eine Gliederungseinheit - also Architektur-Komponenten. Module als Komponenten ermöglichen also, Systeme später einfacher anzupassen (Änderung, Varianten). Sie können als ganzes ausgetauscht, entfernt oder hinzugefügt werden. Zentrales Element hier ist das ***Information Hiding*** (package visibility, module discriptor).
+
+#### Eigenschaften von Modulen
+
+**Unit of Abstraction**  
+Ein Modul abstrahiert mittels Information Hiding die Details seiner Implementierung. Es genügt, seine Schnittstelle zu verstehen.
+
+**Unit of Analysis**  
+Entwickler eines Moduls kennen dessen Implementierung und können Eigenschaften analysieren bzw. beurteilen. Information Hiding schliesst Einwirkungen Programmierer anderer Module aus.
+
+**Unit of Compilation**  
+Schützt Unit of Abstraction und Unit of Analysis mittels technischer Mittel. Alle Teile des Moduls müssen vorhanden sein und auf Konsistenz geprüft werden können. Kompilat ist ein vollständiges in sich zusammengehöriges Packet für dieses Modul.
+
+**Unit of Delivery**  
+Module werden immer als ein Ganzes ausgeliefert, nicht in einzelteilen. Die Auslieferung eines Moduls sollte immer Sinvoll sein (keine zwingende Kombinationen, sinvolle Konstellationen). Auch kommerzielle Punkte möglich - Lizenzen, Preis.
+
+**Unit of Installation**  
+Welche Komponenten (Module) werden zur Laufzeit verwendet? Speziell auch welche Version installiert wird -> sicherstellen von Unit of Abstraction und Analysis.
+
+**Unit of Loading**  
+Objekt-Strukturen sollen zur Laufzeit konsistent erstellt werden, so dass diese mit Erkenntnissen aus Unit of Analysis übereinstimmen. Es muss sichergestellt werden, dass genau dieselben Executables gemeinsam verwendet werden die auch der Compiler erzeugt hatte. Dieses letzte Glied soll sicherstellen, dass sich das System so verhält wie es vom Entwickler geplant wurde.
+
+#### Methodisches Vorgehen
+
+**1. Welche Module gibt es?**  
+Zuerst muss geklärt werden, welche Module benötigt werden. Als Entwurfsmethode eignet sich RDD.
+
+Entscheidungen kapseln nach **Parnas** (welche Notwendigkeiten für Änderungen werden erwartet?):
+
+1. Liste erstellen, von Entwurfsentscheidungen, die schwer zu treffen sind oder man spätere Änderungen erwartet.
+2. Für jede der notierten Entscheidungen soll ein Modul geplant werden.
+
+**Scenario-based Software Engineering**  
+Änderungs Szenarios beschreiben, die zu Änderungen von Anforderungen das System führen und eine Antwort der Entwickler benötigt.
+
+**2. Welche Module sind von anderen abhängig?**  
+Wenn ein Modul A von einem Modul B abhängig ist, heisst dass, dass mind. der öffentliche Teil vom Modul B vorhanden sein muss, damit A programmiert werden kann. Ansonsten kann A nicht verstanden noch kompiliert werden.
+
+- Module dürfen nicht gegenseitig abhängig sein (A <=> B)
+- Module dürfen nicht zyklisch Abhängig sein (A => B => C => A)
+- Module dürfen nicht von noch nicht existierenden Modulen abhängig sein
+- Module dürfen nicht von "geheimen" Modulen abhängig sein
+
+**3. Wie genau arbeiten die Module zusammen?**  
+Es muss überlegt werden, wie die Zusammenarbeit der Module aussehen muss, damit das resultierende System die Aufgaben erfüllen kann. Am besten kann dies mittels konkreter Szenarien beurteilt werden (spezifische Use Cases). Um darzustellen, welche Informationen zwischen den Modulen im Szenario ausgetauscht werden, eignet sich ein Sequenz-Diagramm. **Die Akteure sind jeweils die Module selbst!**
+
+***Wichtig:   
+Ein erstes Diagramm kann zwischen den Modulen gezeichnet werden. In einem zweiten Schritt muss dies aber so verfeinert werden, dass Module nur auf Objekte gerichtet Aktionen ausführen können (z.B. DAO, statische exportierte Klasse, usw.).***
+
+**4. Wie kann das System gestartet werden?**
+Module sind Komponenten der Development View. Es muss also definiert werden, wie Beziehungen zwischen Modulen etabliert werden können.
+
+Es wird grundsätzlich zwischen 2 Fällen unterschieden:
+
+1. Eine Klasse X im Modul A benötigt eine Klasse Y im Modul B. Klasse A.X importiert also Klasse B.Y.
+	- B exportiert Y, A kann Y instanzieren mit ```new Y()```	- B exportiert eine Facotry für ```? implements IY```, A kann mit der Factory ein Y erzeugen. Factory muss bekannt sein
+	
+2. Eine Klasse X im Modul A benötigt eine Klasse Y im Modul B. Klasse A.X importiert aber B nicht!
+	- Benötigte Beziehung muss zur Laufzeit etabliert werden (Dependency Injection)
+	- Lösen mittels ServiceDescriptors und ServiceLoader von Java 9 Modulen
+
+**5. Wie sehen die Schnittstellen der Module aus?**  
+Aus den Schritte 1 bis 4 kann man ableiten, wie die Schnittstellen der Module gestaltet werden müssen. Jedes Modul muss darin die Klassen/Interfaces enthalten, welche im Schritt 3 und 4 von anderen Modulen benötigt werden.
+
