@@ -427,3 +427,80 @@ VisualizerB hält sich nicht an diese Spezifikation und verändert das Array (sw
 4. Wiederholen Sie den Prozess ab 2.
 
 Schnittstellen können also einen kleinen Anteil an ausführbarem Code enthalten, welcher die Einhaltung der Spezifikation erzwingt. Diese Anweisungen sind Teil des Vertrags, zwischen Hersteller und Lieferant und dürfen nicht einfach verändert werden. Konkret kann dies z.B. mit einer Komponente Framework gelöst werden.
+
+### Architekturmuster
+
+##### Schichtenarchitektur
+
+Das am meisten verbreitete Architekturmuster ist jedes der Schichten oder Layers. Hierbei werden Komponenten in Schichten eingeteilt, welche dann übereinander gestapelt die Architektur darstellen. **Untere Schichten dürfen hierbei obere Schichten nicht kennen!**
+
+**Strikte Schichtenarchitektur**  
+Kennt jeweils nur die folgende Schicht, und nicht die folgende + n Schicht!
+
+Vorteile Development View:  
+Weiter unten liegende Schichten können ausgetauscht oder komplett umgestaltet werden.  
+Weniger Abhängigkeiten.
+
+Vorteile Logical View:
+Garantien die eine Schicht auf Zugriff auf tiefere Schichten gibt können nicht umgangen werden.
+
+**NICHT-Strikte Schichtenarchitektur**  
+
+Vorteile Development View: 
+Braucht keinen Code der nur zum Durchreichen da ist.
+Flexibler: Man braucht nicht schon von Beginn an alles durchgeplant zu haben.
+
+Vorteile Logical View:  
+Schneller Zugriff auf eine Schicht möglich.
+
+**Trade-Off**  
+Der Trade-Off besteht also zwischen der Zugriffsgeschindigkeit dem Bedürfnis tiefere Schichten austauschen zu können bzw. Zugriff zu regulieren.
+
+##### Model View Controller (MVC)  
+Model: Geschäftslogik, Daten, Domain Models, Stellt Observables zur Verfügung (Properties)
+View: Zuständig für die Darstellung, Daten darstellen usw.
+Controller: Controller interpretiert View Inputs und reagiert entsprechend darauf.
+
+**Beziehung zwischen Model und View**  
+Observer Pattern ist fester Bestandteil von MVC. Die View registriert sich beim Model und enthält von dieser Updates welche sie darstellen kann.
+
+**Java FX**  
+JavaFX ermutigt Entwickler zur verwendung von MVC Patterns, da FX bereits selbst Model (Properties) und View trennt.
+
+```java
+private DoubleProperty amountDue = new SimpleDoubleProperty();
+private IntegerProperty amountDue = new SimpleIntegerProperty()
+
+@FXML
+private void initialize() {
+	op1.textProperty().addListener((observable, oldValue, newValue) -> value1.set(intFromString(newValue, 10)));
+	op2.textProperty().addListener((observable, oldValue, newValue) -> value2.set(intFromString(newValue, 10)));
+	sum.textProperty().bind(value1.add(value2).asString());
+}
+private int intFromString(String s, int base) {
+	try { return Integer.parseInt(s, base); }
+	catch (NumberFormatException e) { return 0; }
+} 
+```
+
+**Beziehung zwischen Controller und View**  
+Die View soll nicht von Klassen des Controllers abhängig sein. Der Controller kann im Strategy Pattern als Strategie der View angesehn werden. Der Kontroller registriert beim Control also ActionListeners welche bei einem Event ein Callback auslösen, so dass der Controller auf diese Events reagieren kann.
+
+**Der MVC-Controller ist also für die GUI-Logik verantwortlich, nicht jedoch für die Geschäftslogik, die ausschliesslich Teil des Models ist**
+
+**Beziehung zwischen Controller und Model**  
+GUI-Logik und Geschäftslogik muss unterschieden werden. Die Geschäftslogik ist meist komplex und abhängig von fachlichen Vorgaben. Die GUI-Logik ist dagegen für die Verarbeitung der Eingaben und steuerung der GUI zuständig. Wird die GUI geändert, so soll das Model meist gleich bleiben.
+
+**Grenzen von MVC**
+MVC zeichnet sich vorallem durch zwei Merkmale aus:  
+- GUI-Logik hängt von View ab (nicht umgekehrt)
+- View wird vom Model über Änderungen notifiziert
+
+Es besteht ein unmittelbarer Konflikt bei Web-Applikationen die z.B. mit REST-Schnittstellen kommunizieren. Dies, weil keine Notifizierung der Clients möglich ist (keine stetige Verbindung). So lässt sich das MVC-Pattern bestenfalls auf dem Server einsetzten.
+
+##### Model View View Model (MVVM)  
+Dinge die sich unabhängig von einander ändern, über die man unabhängig von einander entscheiden möchte, oder für die unterschiedliche Skills/Wekzeuge nötig sind, sollen in seperate Teile gegliedert werden. Bei Benutzerschnittstellen haben sich neu folgende Verantwortungsbereiche gebildet.
+
+1. Model: Eigentliche Datenverarbeitung, welche **völlig** unabhängig von der Benutzerschnittstelle ist. (z.B. REST)
+2. ViewModel: Operationen und Datenverknüpfung für Benutzerschnittstelle: GUI-Logik, Properties bereitstellen
+3. View: Darstellung und Layout mittels Verwendung der vom ViewModel bereitgestellten Properties und Daten
