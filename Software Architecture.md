@@ -387,3 +387,43 @@ Es wird grundsätzlich zwischen 2 Fällen unterschieden:
 **5. Wie sehen die Schnittstellen der Module aus?**  
 Aus den Schritte 1 bis 4 kann man ableiten, wie die Schnittstellen der Module gestaltet werden müssen. Jedes Modul muss darin die Klassen/Interfaces enthalten, welche im Schritt 3 und 4 von anderen Modulen benötigt werden.
 
+### Schnittstellen
+
+Module in einem System müssen gegenseitig interagieren können, hierzu ist es nötig Schnittstellen zu definieren. Damit Module z.B. in Arbeitsteilung entwickelt werden können, müssen diese Schnittstellen möglichst früh und detailliert definiert werden. Also wie die Kommunikation funktioniert (z.B. REST) aber auch welche Parameter, Rückgabewerte, Vor und Nachbedingungen gelten sollen.
+
+**Was gehört zu einer Schnittstelle?** => alles was von aussen sichtbar ist!
+
+Eine Schnittstelle kann also so definiert werden:  
+- Der Ort, an dem zwei Module auseinandergeschnitten werden.
+- Die Schnittmenge dessen, wass Modul A und Modul B voneinander wissen müssen um funktionieren zu können.
+
+**Definition einer Schnittstelle**
+Eine Schnittstelle muss auf drei Ebenenen definiert werden, so dass diese verstanden werden kann.
+
+1. **Verbindungs-Technologie**: Wie werden die Operationen aktiviert, Parameter und Resultat übergeben?
+2. **Syntax-Ebene**: Wie wird die Operation identifiziert, wie die Parameter?
+3. **Semantik-Ebene**: Was bedeuten die Parameter und Resultate genau?
+
+**In welchen Komponenten (Modulen) sind Schnittstellen definiert?**
+
+1. **Angebotene Schnittstelle**: Die Schnittstelle wird von der Komponente Angeboten, welche auch die Funktionalität dafür implementiert. Beispiel: Library.
+2. **Angeforderte Schnittstelle**: Eine Implementierung zur Schnittstelle wird von der Komponente angefordert, die auch die Schnittstelle definiert. Beispiel: Plug-In, Erweiterungsschnittstelle
+3. **Standard Schnittstelle**: Die Schnittstelle wird in einer seperaten Komponente geführt, unabhängig von Aufrufer und Implementierer. Beispiel: JEE API
+
+### Component Frameworks
+Eine Standard-Schnittstelle ist die Basis für offene Systeme, so dass Software-Hersteller Komponenten bauen können ohne über weitere Lieferanten etwas wissen zu müssen. Weitere Personen können dann schlussendlich aus den Komponenten ein lauffähiges System bilden. Kostengünstig funktioniert dies jedoch nur dann, wenn die Komponenten auch die Spezifikation einhalten, da sie sonst zu viele Freiheiten hätten. Hier hilft es, die Standard-Schnittstelle mit minimaler Funktionalität auszustatten, die die Einhaltung der Standard-Schnittstelle sicherstellt. Dies wird **Component Framework** genannt.
+
+Werden Schnittstellen zwischen Komponenten gebildet, so kann es passieren, dass die Komponent A mit Komponent B einwandfrei funktioniert, jedoch Komponent A mit Komponent C zu falschem Verhalten führt. Dies, da sich nicht alle Komponenten an die Spezifikation der Standard-Schnittstelle gehalten haben.
+
+**Beispiel**
+Die Klasse Visualizer sollte ein erhaltenes Array nicht verändern, da dieses schon durch den Algorithmus gemacht wurde.
+VisualizerA hält sich an diese Spezifikation, die Daten werden korrekt angezeigt.
+VisualizerB hält sich nicht an diese Spezifikation und verändert das Array (swap) bevor es gezeichnet wird.
+
+**Methode zum Schnittstellenentwurf**  
+1. Schreiben Sie eine einfache Standardschnittstelle auf
+2. Erfinden Sie eine fehlerhalte Implementierung
+3. Überarbeiten Sie die Standardschnittele so, dass diese Impl unmöglich wird.
+4. Wiederholen Sie den Prozess ab 2.
+
+Schnittstellen können also einen kleinen Anteil an ausführbarem Code enthalten, welcher die Einhaltung der Spezifikation erzwingt. Diese Anweisungen sind Teil des Vertrags, zwischen Hersteller und Lieferant und dürfen nicht einfach verändert werden. Konkret kann dies z.B. mit einer Komponente Framework gelöst werden.
